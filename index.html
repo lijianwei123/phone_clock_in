@@ -1,39 +1,163 @@
 <!DOCTYPE html>
 <html>
-  <head>
-    <meta content="text/html; charset=utf-8" http-equiv="Content-Type"/>
-    <link href=""  rel="icon" type="image/x-icon" />
-    <script src="js/jquery.min.js"></script>
-    
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <!-- Bootstrap -->
-    <link href="css/bootstrap.min.css" rel="stylesheet" media="screen">
-    <script src="js/bootstrap.min.js"></script>
-   
-    <title>电脑端打卡</title>
-   
-  </head>
-  <body>
+<head>
+<meta content="text/html; charset=utf-8" http-equiv="Content-Type" />
+<link href="" rel="icon" type="image/x-icon" />
+<script src="js/jquery.min.js"></script>
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<!-- Bootstrap -->
+<link href="css/bootstrap.min.css" rel="stylesheet" media="screen">
+<script src="js/bootstrap.min.js"></script>
+
+<title>电脑端打卡</title>
+
+</head>
+<body>
 
 
 	<div class="container">
 		<div class="row">
 			<div class="span12">
-				<ul class="nav nav-tabs">
-					<li class="active"><a href="#">首页</a></li>
-					<li><a href="#">我的打卡记录</a></li>
-					<li class="disabled"><a href="#">登录/登出</a></li>
+				<ul class="nav nav-tabs" id="header_nav">
+					<li class="active"><a href="#home">首页</a></li>
+					<li><a href="#clock_record_list">我的打卡记录</a></li>
+					<li><a href="#profile">我的信息</a></li>
+					
+					<li class="dropdown pull-right">
+                     <a href="#" data-toggle="dropdown" class="dropdown-toggle">下拉<strong class="caret"></strong></a>
+                     <ul class="dropdown-menu">
+                        <li>
+                            <a href="#">操作</a>
+                        </li>
+                        <li>
+                            <a href="#">设置栏目</a>
+                        </li>
+                        <li>
+                            <a href="#">更多设置</a>
+                        </li>
+                        <li class="divider">
+                        </li>
+                        <li>
+                            <a href="#">分割线</a>
+                        </li>
+                     </ul>
+                    </li>
+					
 				</ul>
-				<div class="container">
-				<i class="icon-search"></i>
-				<h3>上下班打卡是个好习惯！</h3>
+
+
+
+
+
+				<div class="tab-content">
+					<div class="tab-pane active" id="home">
+						<div class="container">
+							<h3>上下班打卡是个好习惯！</h3>
+						</div>
+						<button class="btn btn-large btn-primary" type="button">上班</button>
+						<button class="btn btn-primary btn-large" type="button">下班</button>
+					</div>
+					<div class="tab-pane" id="clock_record_list">
+						<div class="container">
+							<div class="row">
+								<div class="span12">
+									<table class="table table-striped table-condensed">
+										<thead>
+											<tr>
+												<th>姓名</th>
+												<th>打卡时间</th>
+												<th>打卡状态</th>
+												<th>备注</th>
+											</tr>
+										</thead>
+										<tbody>
+											<tr>
+												<td>1</td>
+												<td>TB - Monthly</td>
+												<td>01/04/2012</td>
+												<td>Default</td>
+											</tr>
+											<tr class="success">
+												<td>1</td>
+												<td>TB - Monthly</td>
+												<td>01/04/2012</td>
+												<td>Approved</td>
+											</tr>
+											<tr class="error">
+												<td>2</td>
+												<td>TB - Monthly</td>
+												<td>02/04/2012</td>
+												<td>Declined</td>
+											</tr>
+											<tr class="warning">
+												<td>3</td>
+												<td>TB - Monthly</td>
+												<td>03/04/2012</td>
+												<td>Pending</td>
+											</tr>
+											<tr class="info">
+												<td>4</td>
+												<td>TB - Monthly</td>
+												<td>04/04/2012</td>
+												<td>Call in to confirm</td>
+											</tr>
+										</tbody>
+									</table>
+								</div>
+							</div>
+						</div>
+
+					</div>
+
+
+					<div class="tab-pane" id="profile">我的信息</div>
 				</div>
-				<button class="btn btn-large btn-primary" type="button">上班</button>
-				<button class="btn btn-primary btn-large" type="button">下班</button>
+
+
 			</div>
 		</div>
 	</div>
 
-  </body>
+	<script type="text/javascript">
+	$(function() {
+	    var config = {
+	    	'load_profile_url': 'http://168.192.122.71:80000/index.php'
+	    };
+	    
+	    //$.ajaxSetup({'timeout': 10});
+		
+		$('#header_nav a').click(function(e) {
+			e.preventDefault();
+			$(this).tab('show');
+		});
+	
+		
+		var clock_in = {};
+		
+		//获取客户端信息
+		clock_in.loadClientProfile = function()
+		{
+			   try{
+				    $.ajax({
+			             url: config.load_profile_url,
+			             dataType:"jsonp",
+			             timeout: 3000, 
+			             success:function(data){
+			                 alert(data);
+			             }, 
+			             error: function(){
+			            	 alert('请安装客户端');
+			             }
+			        });
+			   }catch(err){
+				   alert('123');
+			   }
+		}
+		clock_in.loadClientProfile();
+	  });
+	</script>
+
+</body>
 </html>
 
