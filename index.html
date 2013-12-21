@@ -55,8 +55,8 @@
 						<div class="container">
 							<h3>上下班打卡是个好习惯！</h3>
 						</div>
-						<button class="btn btn-large btn-primary" type="button">上班</button>
-						<button class="btn btn-primary btn-large" type="button">下班</button>
+						<button class="btn btn-large btn-primary" type="button" id="go_school">上班</button>
+						<button class="btn btn-primary btn-large" type="button" id="go_home">下班</button>
 					</div>
 					<div class="tab-pane" id="clock_record_list">
 						<div class="container">
@@ -119,42 +119,71 @@
 		</div>
 	</div>
 
-	<script type="text/javascript">
+	<script type="text/javascript"> 
 	$(function() {
-	    var config = {
-	    	'load_profile_url': 'http://168.192.122.71:80000/index.php'
-	    };
-	    
-	    //$.ajaxSetup({'timeout': 10});
-		
 		$('#header_nav a').click(function(e) {
 			e.preventDefault();
 			$(this).tab('show');
 		});
-	
 		
-		var clock_in = {};
+
+	    var clock_in = {};
+	    
+	    var client_profile = {};
+	    
+	    var config = {
+	            'load_info_url': 'http://168.192.122.71:30051/info/mac',
+	            'go_school_url': 'http://clock.com/go.php?action=go_school',
+	            'go_home_url' : 'http://clock.com/go.php?action=go_home'
+	    };
 		
-		//获取客户端信息
+		//获取客户端mac信息
 		clock_in.loadClientProfile = function()
 		{
 			   try{
 				    $.ajax({
-			             url: config.load_profile_url,
-			             dataType:"jsonp",
+			             url: config.load_info_url,
+			             dataType: "jsonp",
 			             timeout: 3000, 
-			             success:function(data){
-			                 alert(data);
+			             async: false,
+			             cache: false,
+			             success: function(data){
+			                 client_profile.mac = data.mac;
 			             }, 
 			             error: function(){
 			            	 alert('请安装客户端');
 			             }
 			        });
 			   }catch(err){
-				   alert('123');
+				   alert(err);
 			   }
-		}
+		};
+		
 		clock_in.loadClientProfile();
+		
+		//打卡
+		$('#go_school').click(function(){
+			 
+				try{
+		               $.ajax({
+		                    url: config.go_school_url,
+		                    timeout: 3000, 
+		                    type: 'POST',
+		                    cache: false,
+		                    data: {'mac': client_profile.mac},
+		                    success: function(data){
+		                        alert(data);
+		                    }, 
+		                    error: function(){
+		                        alert('网络错误');
+		                    }
+		               });
+		          }catch(err){
+		              alert(err);
+		          }
+		});
+
+		
 	  });
 	</script>
 
